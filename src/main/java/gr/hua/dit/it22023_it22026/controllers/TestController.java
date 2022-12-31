@@ -41,7 +41,7 @@ public class TestController
     {
         System.out.println("Starting");
         Car car =
-                new Car("A180" , "Mercedes Benz" , "grey" , "ZHB8313" , LocalDate.now() , 0 , 120);
+                new Car("A180" , "Mercedes Benz" , "grey" , "ZHB8313" , 2018 , 0 , 120);
         
         Session session = entityManager.unwrap(Session.class);
         session.merge(car);

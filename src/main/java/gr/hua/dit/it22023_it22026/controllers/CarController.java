@@ -1,17 +1,23 @@
 package gr.hua.dit.it22023_it22026.controllers;
 
 import gr.hua.dit.it22023_it22026.models.Car;
+import gr.hua.dit.it22023_it22026.models.User;
 import gr.hua.dit.it22023_it22026.repositories.CarRepository;
+import gr.hua.dit.it22023_it22026.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/cars")
+@RequestMapping("/api/cars")
 public class CarController {
 
     @Autowired
-    private CarRepository carRepository;
-
+    private CarRepository  carRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
+    
     @PostMapping()
     public Car insertCar(@RequestBody Car car){
 
@@ -32,7 +38,7 @@ public class CarController {
              car1.setModel(car.getModel());
              car1.setKilometers_driven(car.getKilometers_driven());
              car1.setRelease_date(car.getRelease_date());
-             car1.setUser(car.getUser());
+             car1.setOwner(car.getOwner());
              return carRepository.save(car1);
 
          }
@@ -49,6 +55,22 @@ public class CarController {
         }
         return null;
 
+    }
+    
+    
+    @PutMapping("/{liscence_plate}/{id}")
+    public boolean setCarOwner(@PathVariable String liscence_plate,@PathVariable int id) {
+        
+        User user = userRepository.findById(id).orElse(null);
+        Car car = carRepository.findById(liscence_plate).orElse(null);
+        
+        if (user != null && car != null) {
+            car.setOwner(user);
+            carRepository.save(car);
+            return true;
+        }
+        return false;
+        
     }
 
 

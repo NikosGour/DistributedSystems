@@ -1,10 +1,9 @@
 package gr.hua.dit.it22023_it22026.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import gr.hua.dit.it22023_it22026.repositories.CarRepository;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 
@@ -30,7 +29,8 @@ public class Car
     private String color;
     
     @Column(name = "release_date")
-    private LocalDate release_date;
+    @JsonFormat(pattern = "yyyy")
+    private int release_year;
     
     @Column(name = "kilometers")
     private int kilometers_driven;
@@ -40,8 +40,21 @@ public class Car
     
     @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
-    @JsonBackReference
-    private User user;
+    @JsonBackReference(value = "user-car")
+    private User owner;
+    
+    @OneToOne(mappedBy = "car",cascade = CascadeType.ALL)
+    private Transfer transfer;
+    
+    public Transfer getTransfer()
+    {
+        return transfer;
+    }
+    
+    public void setTransfer(Transfer transfer)
+    {
+        this.transfer = transfer;
+    }
     
     public Car()
     {
@@ -49,13 +62,13 @@ public class Car
     }
     
     
-    public Car(String model, String brand, String color, String liscence_plate_number, LocalDate release_date, int kilometers_driven, int horse_power)
+    public Car(String model, String brand, String color, String liscence_plate_number, int release_year, int kilometers_driven, int horse_power)
     {
         this.model = model;
         this.brand = brand;
         this.color = color;
         this.liscence_plate_number = liscence_plate_number;
-        this.release_date = release_date;
+        this.release_year = release_year;
         this.kilometers_driven = kilometers_driven;
         this.horse_power = horse_power;
     }
@@ -103,14 +116,14 @@ public class Car
         this.liscence_plate_number = liscence_plate_number;
     }
     
-    public LocalDate getRelease_date()
+    public int getRelease_date()
     {
-        return release_date;
+        return release_year;
     }
     
-    public void setRelease_date(LocalDate release_date)
+    public void setRelease_date(int release_year)
     {
-        this.release_date = release_date;
+        this.release_year = release_year;
     }
     
     public int getKilometers_driven()
@@ -133,14 +146,14 @@ public class Car
         this.horse_power = horse_power;
     }
     
-    public User getUser()
+    public User getOwner()
     {
-        return user;
+        return owner;
     }
     
-    public void setUser(User user)
+    public void setOwner(User user)
     {
-        this.user = user;
+        this.owner = user;
     }
     
     // endregion

@@ -29,10 +29,19 @@ public class User
     
     @Column(name = "phone_number")
     private Long phone_number;
-    
-    @JsonManagedReference
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+
+    @JsonManagedReference(value = "user-car")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private final List<Car> cars = new ArrayList<>();
+    
+    
+    @JsonManagedReference(value = "user-outgoing-transfer")
+    @OneToMany(mappedBy = "currentOwner", cascade = CascadeType.ALL)
+    private List<Transfer> outgoing_transfers;
+    
+    @JsonManagedReference(value = "user-incoming-transfer")
+    @OneToMany(mappedBy = "newOwner", cascade = CascadeType.ALL)
+    private List<Transfer> incoming_transfers;
     
     public User()
     {
@@ -52,7 +61,7 @@ public class User
     public void addCar(Car car)
     {
         cars.add(car);
-        car.setUser(this);
+        car.setOwner(this);
     }
     
     
