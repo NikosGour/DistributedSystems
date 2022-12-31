@@ -1,8 +1,10 @@
 package gr.hua.dit.it22023_it22026.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import gr.hua.dit.it22023_it22026.repositories.CarRepository;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 
@@ -11,7 +13,8 @@ import java.time.LocalDate;
 @Table(name = "cars")
 public class Car
 {
-    
+
+
     @Id
     @Column(name = "liscence_plate_number",unique = true)
     @Size(max = 7,message = "Liscence plate number must be 7 characters long")
@@ -35,7 +38,7 @@ public class Car
     @Column(name = "horse_power")
     private int horse_power;
     
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;

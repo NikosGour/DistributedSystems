@@ -1,5 +1,6 @@
 package gr.hua.dit.it22023_it22026.controllers;
 
+import gr.hua.dit.it22023_it22026.models.Car;
 import gr.hua.dit.it22023_it22026.models.User;
 import gr.hua.dit.it22023_it22026.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ public class UserController
 {
     @Autowired
     private UserRepository userRepository;
+
     
     
     @PostMapping()
@@ -40,6 +42,17 @@ public class UserController
         return null;
         
     }
+    @DeleteMapping("/{id}")
+    public User deleteUser(@PathVariable int id){
+        User user=userRepository.findById(id).orElse(null);
+        if(user != null) {
+            userRepository.deleteById(id);
+            return user;
+        }
+        return null;
+    }
+
+
     
     
 }
