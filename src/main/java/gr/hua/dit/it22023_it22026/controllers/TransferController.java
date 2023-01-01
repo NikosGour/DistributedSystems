@@ -9,6 +9,9 @@ import gr.hua.dit.it22023_it22026.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/actions")
 public class TransferController
@@ -43,6 +46,17 @@ public class TransferController
         }
         return false;
     
+    }
+
+
+    @GetMapping ("/{newOnnerId}/{tranfers}")
+    public List<Transfer> getAllTranfersByNewOwner(@RequestBody List<Transfer> incomingTranfers, @PathVariable int newOwnerId, @PathVariable List<Transfer> transfers) {
+        User newOwner=userRepository.findById(newOwnerId).orElse(null);
+        if(newOwner == null){
+            return null;
+        }
+
+        return incomingTranfers;
     }
     
     
