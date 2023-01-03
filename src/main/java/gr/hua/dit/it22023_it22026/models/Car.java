@@ -2,6 +2,8 @@ package gr.hua.dit.it22023_it22026.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
@@ -41,9 +43,11 @@ public class Car
     @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     @JsonBackReference(value = "user-car")
+    @JsonIgnore
     private User owner;
     
     @OneToOne(mappedBy = "car",cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "car-transfer")
     private Transfer transfer;
     
     public Transfer getTransfer()

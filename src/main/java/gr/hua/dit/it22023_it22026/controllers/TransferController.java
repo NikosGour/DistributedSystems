@@ -25,9 +25,10 @@ public class TransferController
     
     @Autowired
     private TransferRepository transferRepository;
-
+    
     @PostMapping("/{licensePlate}/{newOwnerId}")
-    public boolean transferCar(@RequestBody String transfer_address, @PathVariable String licensePlate , @PathVariable int newOwnerId)
+    public boolean transferCar(@RequestBody String transfer_address ,
+                               @PathVariable String licensePlate , @PathVariable int newOwnerId)
     {
         Car car = carRepository.findById(licensePlate).orElse(null);
         User newOwner = userRepository.findById(newOwnerId).orElse(null);
@@ -40,23 +41,18 @@ public class TransferController
             {
                 return false;
             }
-            Transfer transfer = new Transfer(currentOwner, newOwner, car, transfer_address);
+            Transfer transfer = new Transfer(currentOwner,newOwner , car , transfer_address);
             transferRepository.save(transfer);
             return true;
         }
         return false;
-    
+        
     }
-
-
-    @GetMapping ("/{newOnnerId}/{tranfers}")
-    public List<Transfer> getAllTranfersByNewOwner(@RequestBody List<Transfer> incomingTranfers, @PathVariable int newOwnerId, @PathVariable List<Transfer> transfers) {
-        User newOwner=userRepository.findById(newOwnerId).orElse(null);
-        if(newOwner == null){
-            return null;
-        }
-
-        return incomingTranfers;
+    
+    @GetMapping("/{newOwnerId}")
+    public List<Transfer> getAllTransfersByNewOwner(@PathVariable int newOwnerId)
+    {
+        return transferRepository.findAllByNewOwnerId(newOwnerId);
     }
     
     

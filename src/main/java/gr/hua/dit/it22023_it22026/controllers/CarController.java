@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/cars")
 public class CarController {
@@ -73,6 +75,11 @@ public class CarController {
         
     }
 
+    
+    @GetMapping()
+    public List<Car> getAllCars(){
+        return carRepository.findAll();
+    }
 
 
 }

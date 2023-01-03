@@ -2,6 +2,7 @@ package gr.hua.dit.it22023_it22026.models;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,21 +15,29 @@ public class Transfer
     @Column(name = "id")
     private int id;
     
+    
     @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "current_owner_id")
     @JsonBackReference(value = "user-outgoing-transfer")
+    @JsonIgnore
     private User currentOwner;
     
     @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "new_owner_id")
     @JsonBackReference(value = "user-incoming-transfer")
+    @JsonIgnore
     private User newOwner;
     
     @OneToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "car_id",unique = true)
+    @JsonBackReference(value = "car-transfer")
     private Car car;
+    
+    @Column(name = "transfer_address")
     private String transferAddress;
-    private long newOwnerAFM;
+    
+    @Column(name = "new_owner_afm")
+    private Long newOwnerAFM;
     
     public Transfer()
     {

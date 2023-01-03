@@ -1,5 +1,7 @@
 package gr.hua.dit.it22023_it22026.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -32,15 +34,18 @@ public class User
 
     @JsonManagedReference(value = "user-car")
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @JsonIgnore
     private final List<Car> cars = new ArrayList<>();
     
     
     @JsonManagedReference(value = "user-outgoing-transfer")
     @OneToMany(mappedBy = "currentOwner", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Transfer> outgoing_transfers;
     
     @JsonManagedReference(value = "user-incoming-transfer")
     @OneToMany(mappedBy = "newOwner", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Transfer> incoming_transfers;
     
     public User()
