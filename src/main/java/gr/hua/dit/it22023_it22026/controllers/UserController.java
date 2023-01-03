@@ -1,9 +1,9 @@
 package gr.hua.dit.it22023_it22026.controllers;
 
-import gr.hua.dit.it22023_it22026.models.Car;
 import gr.hua.dit.it22023_it22026.models.User;
 import gr.hua.dit.it22023_it22026.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +14,9 @@ public class UserController
 {
     @Autowired
     private UserRepository userRepository;
-
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
     
     @PostMapping()
@@ -24,6 +26,9 @@ public class UserController
         {
             return null;
         }
+        
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         return userRepository.save(user);
     }
     
@@ -34,7 +39,7 @@ public class UserController
         User user1 = userRepository.findById(id).orElse(null);
         if (user1 != null)
         {
-            user1.setName(user.getName());
+            user1.setUsername(user.getUsername());
             user1.setAddress(user.getAddress());
             user1.setPhone_number(user.getPhone_number());
             user1.setAFM(user.getAFM());

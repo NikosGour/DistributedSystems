@@ -1,9 +1,10 @@
 package gr.hua.dit.it22023_it22026.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +18,18 @@ public class User
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    @Column(name = "name")
-    private String name;
+    @NotEmpty
+    @Column(name = "username",nullable = false,unique = true)
+    private String username;
+    
+    @NotEmpty
+    @Column(name = "password",nullable = false)
+    private String password;
+    
+    private boolean enabled = true;
     
     @Column(name = "email")
+    @Email(message = "Email should be valid")
     private String email;
     
     @Column(name = "address")
@@ -48,6 +57,7 @@ public class User
     @JsonIgnore
     private List<Transfer> incoming_transfers;
     
+
     public User()
     {
     
@@ -55,8 +65,8 @@ public class User
     
     public User(String name, String email, String address, Long AFM, Long phone_number)
     {
-        this.name = name;
-        this.email = email;
+        this.username = name;
+        this.email    = email;
         this.address = address;
         this.AFM = AFM;
         this.phone_number = phone_number;
@@ -69,6 +79,7 @@ public class User
         car.setOwner(this);
     }
     
+
     
     // region Getters and Setters
     
@@ -77,14 +88,14 @@ public class User
         return id;
     }
     
-    public String getName()
+    public String getUsername()
     {
-        return name;
+        return username;
     }
     
-    public void setName(String name)
+    public void setUsername(String name)
     {
-        this.name = name;
+        this.username = name;
     }
     
     public String getEmail()
@@ -130,6 +141,26 @@ public class User
     public List<Car> getCars()
     {
         return cars;
+    }
+    
+    public String getPassword()
+    {
+        return password;
+    }
+    
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+    
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+    
+    public void setEnabled(boolean enabled)
+    {
+        this.enabled = enabled;
     }
     
     // endregion
