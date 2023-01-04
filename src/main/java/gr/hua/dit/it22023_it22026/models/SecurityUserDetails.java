@@ -1,15 +1,21 @@
 package gr.hua.dit.it22023_it22026.models;
 
+import gr.hua.dit.it22023_it22026.models.Authority;
+import gr.hua.dit.it22023_it22026.models.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
-public class CustomUserDetails implements UserDetails
+public class SecurityUserDetails implements UserDetails
 {
     private User user;
     
-    public CustomUserDetails(User user)
+    public SecurityUserDetails(User user)
     {
         this.user = user;
     }
@@ -17,7 +23,15 @@ public class CustomUserDetails implements UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities()
     {
-        return null;
+        Set<Authority> authorities = user.getAuthorities();
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        
+        for (Authority authority : authorities)
+        {
+            grantedAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
+            
+        }
+        return grantedAuthorities;
     }
     
     @Override

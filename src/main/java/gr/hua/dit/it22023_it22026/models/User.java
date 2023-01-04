@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -57,7 +58,11 @@ public class User
     @JsonIgnore
     private List<Transfer> incoming_transfers;
     
-
+    
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_authorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
+    @JsonIgnore
+    private Set<Authority> authorities;
     public User()
     {
     
@@ -79,6 +84,12 @@ public class User
         car.setOwner(this);
     }
     
+    
+    public void addAuthority(Authority authority)
+    {
+        authorities.add(authority);
+        authority.getUsers().add(this);
+    }
 
     
     // region Getters and Setters
@@ -161,6 +172,16 @@ public class User
     public void setEnabled(boolean enabled)
     {
         this.enabled = enabled;
+    }
+    
+    public Set<Authority> getAuthorities()
+    {
+        return authorities;
+    }
+    
+    public void setAuthorities(Set<Authority> authorities)
+    {
+        this.authorities = authorities;
     }
     
     // endregion

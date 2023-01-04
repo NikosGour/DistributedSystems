@@ -38,8 +38,8 @@ public class SecurityConfig
     {
         http.authorizeHttpRequests(auth -> auth
                                .requestMatchers(HttpMethod.POST , "/api/users").permitAll()
+                               .requestMatchers("/**").hasAuthority("admin")
                                .anyRequest().authenticated()
-//                               .requestMatchers("/**")
                 )
                 .formLogin().permitAll()
                 .and().logout().permitAll()

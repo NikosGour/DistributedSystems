@@ -1,6 +1,6 @@
 package gr.hua.dit.it22023_it22026.services;
 
-import gr.hua.dit.it22023_it22026.models.CustomUserDetails;
+import gr.hua.dit.it22023_it22026.models.SecurityUserDetails;
 import gr.hua.dit.it22023_it22026.models.User;
 import gr.hua.dit.it22023_it22026.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,6 @@ public class UserDetailsService implements org.springframework.security.core.use
             throw new UsernameNotFoundException("Could not find user");
         }
         
-        return new CustomUserDetails(user);
+        return new SecurityUserDetails(user);
     }
 }
