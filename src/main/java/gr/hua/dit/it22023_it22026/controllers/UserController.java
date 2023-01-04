@@ -1,7 +1,10 @@
 package gr.hua.dit.it22023_it22026.controllers;
 
+import gr.hua.dit.it22023_it22026.models.Authority;
 import gr.hua.dit.it22023_it22026.models.User;
+import gr.hua.dit.it22023_it22026.repositories.AuthorityRepository;
 import gr.hua.dit.it22023_it22026.repositories.UserRepository;
+import gr.hua.dit.it22023_it22026.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,8 @@ public class UserController
     @Autowired
     private PasswordEncoder passwordEncoder;
     
+    @Autowired
+    private AuthorityRepository authorityRepository;
     
     @PostMapping()
     public User insertUser(@RequestBody User user)
@@ -26,9 +31,17 @@ public class UserController
         {
             return null;
         }
+        Authority authority = authorityRepository.findByAuthority(Constants.USER);
         
+        if (authority == null)
+        {
+            authority = new Authority();
+            authority.setAuthority(Constants.USER);
+        }
+        
+        user.addAuthority(authority);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
+        
         return userRepository.save(user);
     }
     
