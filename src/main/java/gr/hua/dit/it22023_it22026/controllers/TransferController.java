@@ -6,6 +6,10 @@ import gr.hua.dit.it22023_it22026.models.User;
 import gr.hua.dit.it22023_it22026.repositories.CarRepository;
 import gr.hua.dit.it22023_it22026.repositories.TransferRepository;
 import gr.hua.dit.it22023_it22026.repositories.UserRepository;
+import jakarta.annotation.Resource;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,10 +53,41 @@ public class TransferController
         
     }
     
+    @PostMapping("/{newOwnerId}/{transferID}/accept")
+    @Transactional
+    public boolean acceptTransfer( @PathVariable int newOwnerId, @PathVariable int transferID )
+    {
+    
+
+        Transfer transfer = transferRepository.findById(transferID).orElse(null);
+        User newOwner = userRepository.findById(newOwnerId).orElse(null);
+        
+        
+        
+        if (transfer != null && newOwner != null)
+        {
+            if (transfer.getNewOwner() == newOwner)
+            {
+                transfer.getCar().setOwner(newOwner);
+                transferRepository.delete(transferID);
+                return true;
+            }
+
+        }
+        return false;
+    }
+    
+    
     @GetMapping("/{newOwnerId}")
     public List<Transfer> getAllTransfersByNewOwner(@PathVariable int newOwnerId)
     {
         return transferRepository.findAllByNewOwnerId(newOwnerId);
+    }
+    
+    @GetMapping("/{currentOwnerId}/current")
+    public List<Transfer> getAllTransfersByCurrentOwner(@PathVariable int currentOwnerId)
+    {
+        return transferRepository.findAllByCurrentOwnerId(currentOwnerId);
     }
     
     

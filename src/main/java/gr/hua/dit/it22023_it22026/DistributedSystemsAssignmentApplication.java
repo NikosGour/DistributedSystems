@@ -66,9 +66,9 @@ public class DistributedSystemsAssignmentApplication
         {
             user.addAuthority(authority);
         }
-       
-        
         userRepository.save(user);
+        
+        
     }
     
     @GetMapping("/")

@@ -6,6 +6,7 @@ import gr.hua.dit.it22023_it22026.models.User;
 import gr.hua.dit.it22023_it22026.repositories.AuthorityRepository;
 import gr.hua.dit.it22023_it22026.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public class AuthorityController
     @Autowired
     private UserRepository userRepository;
     
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/{authority}")
     public void addAuthority(@PathVariable String authority)
     {
@@ -33,6 +36,7 @@ public class AuthorityController
         
     }
     
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/{authority}/{user_id}")
     public void addAuthorityToUser(@PathVariable String authority, @PathVariable int user_id)
     {

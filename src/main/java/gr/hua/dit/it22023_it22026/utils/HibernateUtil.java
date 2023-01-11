@@ -12,6 +12,11 @@ import org.hibernate.service.ServiceRegistry;
 
 import java.util.Properties;
 
+/**
+ *  Πρωτιμηστε να χρησιμοποιειτε repositories,
+ *  αμα αυτο δεν ειναι εφηκτο τοτε μπορει να γινει η χρηση αυτης της class*/
+@Deprecated
+
 public class HibernateUtil
 {
     private static SessionFactory sessionFactory;

@@ -76,6 +76,7 @@ public class User
         this.address = address;
         this.AFM = AFM;
         this.phone_number = phone_number;
+        
 
     }
     

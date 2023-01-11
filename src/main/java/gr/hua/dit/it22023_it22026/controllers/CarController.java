@@ -6,6 +6,8 @@ import gr.hua.dit.it22023_it22026.repositories.CarRepository;
 import gr.hua.dit.it22023_it22026.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +22,8 @@ public class CarController {
     @Autowired
     private UserRepository userRepository;
     
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping()
     public Car insertCar(@RequestBody Car car){
 
@@ -28,6 +32,8 @@ public class CarController {
         }
         return carRepository.save(car);
     }
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/{liscence_plate}")
     public Car updateCar(@RequestBody Car car,@PathVariable String liscence_plate){
 
@@ -46,7 +52,8 @@ public class CarController {
          }
          return null;
     }
-
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{liscence_plate}")
     public Car deleteCar(@PathVariable String liscence_plate){
 
@@ -60,6 +67,7 @@ public class CarController {
     }
     
     
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{liscence_plate}/{id}")
     public boolean setCarOwner(@PathVariable String liscence_plate,@PathVariable int id) {
         

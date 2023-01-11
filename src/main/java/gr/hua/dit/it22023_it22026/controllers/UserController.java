@@ -6,6 +6,7 @@ import gr.hua.dit.it22023_it22026.repositories.AuthorityRepository;
 import gr.hua.dit.it22023_it22026.repositories.UserRepository;
 import gr.hua.dit.it22023_it22026.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class UserController
     @Autowired
     private AuthorityRepository authorityRepository;
     
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping()
     public User insertUser(@RequestBody User user)
     {
@@ -46,6 +48,7 @@ public class UserController
     }
     
     
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/{id}")
     public User updateUser(@RequestBody User user , @PathVariable int id)
     {
@@ -62,6 +65,8 @@ public class UserController
         return null;
         
     }
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public User deleteUser(@PathVariable int id){
         User user=userRepository.findById(id).orElse(null);
