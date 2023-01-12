@@ -1,10 +1,14 @@
 package gr.hua.dit.it22023_it22026.controllers;
 
 import gr.hua.dit.it22023_it22026.models.Authority;
+import gr.hua.dit.it22023_it22026.models.Car;
 import gr.hua.dit.it22023_it22026.models.User;
 import gr.hua.dit.it22023_it22026.repositories.AuthorityRepository;
+import gr.hua.dit.it22023_it22026.repositories.CarRepository;
+import gr.hua.dit.it22023_it22026.repositories.TransferRepository;
 import gr.hua.dit.it22023_it22026.repositories.UserRepository;
 import gr.hua.dit.it22023_it22026.utils.Constants;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +28,12 @@ public class UserController
     
     @Autowired
     private AuthorityRepository authorityRepository;
+    
+    @Autowired
+    TransferRepository  transferRepository;
+    
+    @Autowired
+    CarRepository carRepository;
     
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping()
@@ -68,9 +78,15 @@ public class UserController
     
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
+    @Transactional
     public User deleteUser(@PathVariable int id){
         User user=userRepository.findById(id).orElse(null);
+        
         if(user != null) {
+            
+            transferRepository.deleteAllByUser(user);
+            carRepository.deleteAllByUser(user);
+            
             userRepository.deleteById(id);
             return user;
         }

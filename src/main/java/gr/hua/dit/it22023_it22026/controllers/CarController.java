@@ -3,7 +3,9 @@ package gr.hua.dit.it22023_it22026.controllers;
 import gr.hua.dit.it22023_it22026.models.Car;
 import gr.hua.dit.it22023_it22026.models.User;
 import gr.hua.dit.it22023_it22026.repositories.CarRepository;
+import gr.hua.dit.it22023_it22026.repositories.TransferRepository;
 import gr.hua.dit.it22023_it22026.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.security.access.annotation.Secured;
@@ -21,6 +23,10 @@ public class CarController {
     
     @Autowired
     private UserRepository userRepository;
+    
+    
+    @Autowired
+    private TransferRepository transferRepository;
     
     
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -55,10 +61,13 @@ public class CarController {
     
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{liscence_plate}")
+    @Transactional
     public Car deleteCar(@PathVariable String liscence_plate){
 
         Car car=carRepository.findById(liscence_plate).orElse(null);
         if(car != null ){
+            
+            transferRepository.deleteAllByCar(car);
             carRepository.delete(car);
             return car;
         }
