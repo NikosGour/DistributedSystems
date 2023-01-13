@@ -50,16 +50,7 @@ public class Car
     @JsonManagedReference(value = "car-transfer")
     private Transfer transfer;
     
-    public Transfer getTransfer()
-    {
-        return transfer;
-    }
-    
-    public void setTransfer(Transfer transfer)
-    {
-        this.transfer = transfer;
-    }
-    
+
     public Car()
     {
     
@@ -158,6 +149,16 @@ public class Car
     public void setOwner(User user)
     {
         this.owner = user;
+    }
+    
+    public Transfer getTransfer()
+    {
+        return transfer;
+    }
+    
+    public void setTransfer(Transfer transfer)
+    {
+        this.transfer = transfer;
     }
     
     // endregion
