@@ -15,8 +15,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -29,11 +31,17 @@ public class SecurityConfig
     
     @Autowired
     private UserDetailsService userDetailsService;
-    
-    // TODO: FIX ROLES AND PERMISSIONS
+
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception
     {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT","OPTIONS","PATCH", "DELETE"));
+        corsConfiguration.setAllowedOriginPatterns(List.of("*"));
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setExposedHeaders(List.of("Authorization"));
+        
         http.authorizeHttpRequests(auth -> auth
                                .requestMatchers(HttpMethod.POST , "/api/users").permitAll()
                                 .requestMatchers( "/api/authority").hasAuthority(Constants.ADMIN)
@@ -42,7 +50,7 @@ public class SecurityConfig
                 .formLogin().permitAll()
                 .and().logout().permitAll()
                 .and().userDetailsService(userDetailsService)
-                .cors()
+                .cors().configurationSource(request -> corsConfiguration)
                 .and().csrf().disable()
                 .httpBasic();
         
