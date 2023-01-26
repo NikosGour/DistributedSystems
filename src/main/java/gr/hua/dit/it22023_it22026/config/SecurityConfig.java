@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +31,9 @@ public class SecurityConfig
     @Resource
     private DataSource dataSource;
     
+//    @Autowired
+//    private BasicHttpAuth basicHttpAuth;
+    
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -42,17 +47,18 @@ public class SecurityConfig
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setExposedHeaders(List.of("Authorization"));
         
+        
         http.authorizeHttpRequests(auth -> auth
                                .requestMatchers(HttpMethod.POST , "/api/users").permitAll()
                                 .requestMatchers( "/api/authority").hasAuthority(Constants.ADMIN)
                                .anyRequest().authenticated()
                 )
-                .formLogin().permitAll()
-                .and().logout().permitAll()
-                .and().userDetailsService(userDetailsService)
+                .userDetailsService(userDetailsService)
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors().configurationSource(request -> corsConfiguration)
                 .and().csrf().disable()
-                .httpBasic();
+                .httpBasic( );
+               
         
         http.headers().frameOptions().sameOrigin();
         
@@ -60,9 +66,5 @@ public class SecurityConfig
         return http.build();
     }
     
-    @Bean
-    public PasswordEncoder passwordEncoder()
-    {
-        return new BCryptPasswordEncoder();
-    }
+
 }
