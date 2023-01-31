@@ -10,6 +10,8 @@ import gr.hua.dit.it22023_it22026.repositories.UserRepository;
 import gr.hua.dit.it22023_it22026.utils.Constants;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +36,14 @@ public class UserController
     
     @Autowired
     CarRepository carRepository;
+    
+    
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/login")
+    public ResponseEntity<String> login()
+    {
+        return ResponseEntity.status(250).body("You are already logged in");
+    }
     
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping()
