@@ -38,7 +38,7 @@ public class UserController
     CarRepository carRepository;
     
     
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @GetMapping("/login")
     public ResponseEntity<String> login()
     {
