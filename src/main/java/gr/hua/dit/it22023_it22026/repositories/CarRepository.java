@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CarRepository extends JpaRepository<Car, String>
 {
@@ -18,4 +20,6 @@ public interface CarRepository extends JpaRepository<Car, String>
     @Modifying
     @Query("delete from Car t where t = ?1")
     void delete(Car car);
+    
+    List<Car> findAllByOwner(User user);
 }

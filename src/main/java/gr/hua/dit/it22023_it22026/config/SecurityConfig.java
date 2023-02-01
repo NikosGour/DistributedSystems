@@ -49,7 +49,7 @@ public class SecurityConfig
         
         
         http.authorizeHttpRequests(auth -> auth
-                               .requestMatchers(HttpMethod.POST , "/api/users").permitAll()
+                               .requestMatchers("/api/users","/api/cars","/api/actions").permitAll()
                                 .requestMatchers( "/api/authority").hasAuthority(Constants.ADMIN)
                                .anyRequest().authenticated()
                 )

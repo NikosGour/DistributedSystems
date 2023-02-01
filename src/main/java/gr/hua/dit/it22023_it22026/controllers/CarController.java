@@ -98,5 +98,15 @@ public class CarController {
         return carRepository.findAll();
     }
 
+    
+    @GetMapping("/{id}")
+    public List<Car> getCarsByOwner(@PathVariable int id){
+        User user = userRepository.findById(id).orElse(null);
+        if(user != null){
+            return carRepository.findAllByOwner(user);
+        }
+        return null;
+    }
+    
 
 }

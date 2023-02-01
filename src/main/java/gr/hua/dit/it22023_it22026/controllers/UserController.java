@@ -1,5 +1,6 @@
 package gr.hua.dit.it22023_it22026.controllers;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import gr.hua.dit.it22023_it22026.models.Authority;
 import gr.hua.dit.it22023_it22026.models.Car;
 import gr.hua.dit.it22023_it22026.models.User;
@@ -13,9 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -39,10 +42,19 @@ public class UserController
     
     
     @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
-    @GetMapping("/login")
-    public ResponseEntity<String> login()
+    @PostMapping("/login")
+    public ResponseEntity<HashMap<String,Integer>> login(@RequestBody String username)
     {
-        return ResponseEntity.status(250).body("You are already logged in");
+        User user = userRepository.findByUsername(username);
+        if (user == null)
+        {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        
+        int id = user.getId();
+        var res = new HashMap<String,Integer>();
+        res.put("id",id);
+        return ResponseEntity.status(250).body(res);
     }
     
     @PreAuthorize("hasAuthority('ADMIN')")
