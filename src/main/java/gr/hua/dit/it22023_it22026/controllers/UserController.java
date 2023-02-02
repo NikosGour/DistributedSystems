@@ -116,6 +116,7 @@ public class UserController
     }
 
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping()
     public List<User> getAllUsers()
     {

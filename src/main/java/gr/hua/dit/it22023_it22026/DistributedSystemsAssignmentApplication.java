@@ -4,6 +4,7 @@ import gr.hua.dit.it22023_it22026.models.Authority;
 import gr.hua.dit.it22023_it22026.models.Car;
 import gr.hua.dit.it22023_it22026.models.User;
 import gr.hua.dit.it22023_it22026.repositories.AuthorityRepository;
+import gr.hua.dit.it22023_it22026.repositories.CarRepository;
 import gr.hua.dit.it22023_it22026.repositories.UserRepository;
 import gr.hua.dit.it22023_it22026.utils.Constants;
 import gr.hua.dit.it22023_it22026.utils.Test;
@@ -35,6 +36,9 @@ public class DistributedSystemsAssignmentApplication
     AuthorityRepository authorityRepository;
     
     @Autowired
+    CarRepository carRepository;
+    
+    @Autowired
     PasswordEncoder passwordEncoder;
     public static void main(String[] args)
     {
@@ -47,14 +51,24 @@ public class DistributedSystemsAssignmentApplication
     {
         User user = userRepository.findByUsername("root");
         Authority authority = authorityRepository.findByAuthority(Constants.ADMIN);
+        Authority authority1 = authorityRepository.findByAuthority(Constants.USER);
+        
+        boolean isBootstrapped = true;
         if (authority == null)
         {
             authority = new Authority();
             authority.setAuthority(Constants.ADMIN);
-         
+            authorityRepository.save(authority);
+        }
+        if (authority1 == null)
+        {
+            authority1 = new Authority();
+            authority1.setAuthority(Constants.USER);
+            authorityRepository.save(authority1);
         }
         if (user == null)
         {
+            isBootstrapped = false;
             user = new User();
             user.setUsername("root");
             user.setPassword(passwordEncoder.encode("root"));
@@ -68,18 +82,61 @@ public class DistributedSystemsAssignmentApplication
         {
             user.addAuthority(authority);
         }
+        if (!authorities.contains(authority1))
+        {
+            user.addAuthority(authority1);
+        }
         userRepository.save(user);
         
         
+        if (!isBootstrapped)
+        {
+            setDummyData();
+        }
+        
     }
     
-    @GetMapping("/")
-    public String hello()
+    private void setDummyData()
     {
-        return "Hello World!";
+        for (int i = 0; i < 10; i++)
+        {
+            User user = new User();
+            user.setUsername("user" + i);
+            user.setPassword(passwordEncoder.encode("user" + i));
+            user.setAFM(123456789L + i);
+            user.setEmail("user" + i + "@gmail.com");
+            user.setPhone_number(1234567890L + i);
+            user.addAuthority(authorityRepository.findByAuthority(Constants.USER));
+            userRepository.save(user);
+        }
+        
+        User user1 = userRepository.findByUsername("user1");
+        User user2 = userRepository.findByUsername("user2");
+        
+        for (int i = 0; i < 30; i++)
+        {
+            Car car = new Car();
+            car.setBrand("brand" + i);
+            car.setModel("model" + i);
+            car.setLiscence_plate_number("lpn" + i);
+            car.setColor("color" + i);
+            car.setRelease_date(2002 + i);
+            car.setHorse_power(100 + i);
+            car.setKilometers_driven(10000 + i);
+            
+            if (i < 15)
+            {
+                car.setOwner(user1);
+            }
+            else
+            {
+                car.setOwner(user2);
+            }
+            
+            carRepository.save(car);
+            
+        }
     }
-    
-    
     
  
     

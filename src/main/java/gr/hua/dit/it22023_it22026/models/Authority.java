@@ -21,7 +21,7 @@ public class Authority
     @Column(name = "authority")
     private String authority;
     
-    @ManyToMany(mappedBy = "authorities",fetch = FetchType.EAGER , cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @ManyToMany(mappedBy = "authorities",fetch = FetchType.EAGER , cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     @JsonIgnore
     private Set<User> users = new HashSet<>();
     
