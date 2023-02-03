@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -20,6 +21,9 @@ public interface TransferRepository extends JpaRepository<Transfer, Integer>
     ArrayList<Transfer> findAllByNewOwnerId(int newOwnerId);
     
     ArrayList<Transfer> findAllByCurrentOwnerId(int currentOwnerId);
+    
+    @Query(value = "select t from Transfer t where t.car.liscence_plate_number = ?1")
+    List<Transfer> findByCarId(String liscence_plate_number);
     
     @Modifying
     @Query("delete from Transfer t where t.id = ?1")

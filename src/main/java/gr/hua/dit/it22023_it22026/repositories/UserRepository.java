@@ -16,4 +16,6 @@ public interface UserRepository extends JpaRepository<User, Integer>
     @Modifying
     @Query("delete from User t where t.id = ?1")
     void deleteById(int entityId);
+    
+    User findByAFM(Long afm);
 }

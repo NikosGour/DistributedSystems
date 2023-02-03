@@ -79,15 +79,34 @@ public class TransferController
     
     
     @GetMapping("/{newOwnerId}")
-    public List<Transfer> getAllTransfersByNewOwner(@PathVariable int newOwnerId)
+    public List<Car> getAllTransfersByNewOwner(@PathVariable int newOwnerId)
     {
-        return transferRepository.findAllByNewOwnerId(newOwnerId);
+        var t = transferRepository.findAllByNewOwnerId(newOwnerId);
+        var x = new ArrayList<Car>();
+    
+        for (Transfer transfer : t)
+        {
+            x.add(transfer.getCar());
+        }
+        return x;
+    }
+    
+    @GetMapping("{license_plate_number}/car")
+    public Transfer getTransferByCar(@PathVariable String license_plate_number)
+    {
+        var x = transferRepository.findByCarId(license_plate_number);
+        if (x.size() > 0)
+        {
+            return x.get(0);
+        }
+        return null;
     }
     
     @GetMapping("/{currentOwnerId}/current")
     public List<Transfer> getAllTransfersByCurrentOwner(@PathVariable int currentOwnerId)
     {
         return transferRepository.findAllByCurrentOwnerId(currentOwnerId);
+    
     }
     
     

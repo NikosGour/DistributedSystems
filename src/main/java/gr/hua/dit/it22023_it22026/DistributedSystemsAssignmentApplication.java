@@ -72,9 +72,10 @@ public class DistributedSystemsAssignmentApplication
             user = new User();
             user.setUsername("root");
             user.setPassword(passwordEncoder.encode("root"));
-            user.setAFM(123456789L);
+            user.setAFM(1L);
             user.setEmail("root@gmail.com");
-            user.setPhone_number(1234567890L);
+            user.setAddress("root address");
+            user.setPhone_number(1L);
         }
         
         var authorities = user.getAuthorities();
@@ -106,6 +107,7 @@ public class DistributedSystemsAssignmentApplication
             user.setAFM(123456789L + i);
             user.setEmail("user" + i + "@gmail.com");
             user.setPhone_number(1234567890L + i);
+            user.setAddress("user" + i + " address");
             user.addAuthority(authorityRepository.findByAuthority(Constants.USER));
             userRepository.save(user);
         }

@@ -57,6 +57,18 @@ public class UserController
         return ResponseEntity.status(250).body(res);
     }
     
+    
+    @PostMapping("/afm/{afm}")
+    public int getUserByAFM(@PathVariable Long afm)
+    {
+        User user =  userRepository.findByAFM(afm);
+        if (user == null)
+        {
+            return 0;
+        }
+        return user.getId();
+    }
+    
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping()
     public User insertUser(@RequestBody User user)
