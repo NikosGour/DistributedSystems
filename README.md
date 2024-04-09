@@ -11,5 +11,5 @@ docker run --name distributed_systems_project_mysql -p 3306:3306 -e MYSQL_ROOT_P
  ```
 
  ```shell
- java -jar target/DistributedSystemsAssignment-0.0.1-SNAPSHOT.jar 
+ java -jar target/DistributedSystemsAssignment-0.0.1-SNAPSHOT.jar
  ```
