@@ -28,7 +28,7 @@ import java.time.LocalDate;
 @RestController
 public class DistributedSystemsAssignmentApplication
 {
-
+    
     @Autowired
     UserRepository userRepository;
     
@@ -40,10 +40,11 @@ public class DistributedSystemsAssignmentApplication
     
     @Autowired
     PasswordEncoder passwordEncoder;
+    
     public static void main(String[] args)
     {
         SpringApplication.run(DistributedSystemsAssignmentApplication.class , args);
-
+        
     }
     
     @PostConstruct
@@ -69,7 +70,7 @@ public class DistributedSystemsAssignmentApplication
         if (user == null)
         {
             isBootstrapped = false;
-            user = new User();
+            user           = new User();
             user.setUsername("root");
             user.setPassword(passwordEncoder.encode("root"));
             user.setAFM(1L);
@@ -79,18 +80,18 @@ public class DistributedSystemsAssignmentApplication
         }
         
         var authorities = user.getAuthorities();
-        if (!authorities.contains(authority))
+        if (! authorities.contains(authority))
         {
             user.addAuthority(authority);
         }
-        if (!authorities.contains(authority1))
+        if (! authorities.contains(authority1))
         {
             user.addAuthority(authority1);
         }
         userRepository.save(user);
         
         
-        if (!isBootstrapped)
+        if (! isBootstrapped)
         {
             setDummyData();
         }
@@ -129,8 +130,7 @@ public class DistributedSystemsAssignmentApplication
             if (i < 15)
             {
                 car.setOwner(user1);
-            }
-            else
+            } else
             {
                 car.setOwner(user2);
             }
@@ -140,6 +140,5 @@ public class DistributedSystemsAssignmentApplication
         }
     }
     
- 
     
 }
