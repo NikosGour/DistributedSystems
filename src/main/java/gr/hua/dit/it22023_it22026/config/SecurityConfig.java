@@ -25,46 +25,48 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-public class SecurityConfig
-{
-    
-    @Resource
-    private DataSource dataSource;
-    
-//    @Autowired
-//    private BasicHttpAuth basicHttpAuth;
-    
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Bean
-    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception
-    {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT","OPTIONS","PATCH", "DELETE"));
-        corsConfiguration.setAllowedOriginPatterns(List.of("*"));
-        corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setExposedHeaders(List.of("Authorization"));
-        
-        
-        http.authorizeHttpRequests(auth -> auth
-                               .requestMatchers("/api/users","/api/cars","/api/actions").permitAll()
-                                .requestMatchers( "/api/authority").hasAuthority(Constants.ADMIN)
-                               .anyRequest().authenticated()
-                )
-                .userDetailsService(userDetailsService)
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .cors().configurationSource(request -> corsConfiguration)
-                .and().csrf().disable()
-                .httpBasic( );
-               
-        
-        http.headers().frameOptions().sameOrigin();
-        
-        
-        return http.build();
-    }
-    
-
+public class SecurityConfig {
+	
+	@Resource
+	private DataSource dataSource;
+	
+	//    @Autowired
+	//    private BasicHttpAuth basicHttpAuth;
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
+	@Bean
+	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+		corsConfiguration.setAllowedHeaders(List.of("Authorization" , "Cache-Control" , "Content-Type"));
+		corsConfiguration.setAllowedMethods(List.of("GET" , "POST" , "PUT" , "DELETE" , "PUT" , "OPTIONS" , "PATCH" , "DELETE"));
+		corsConfiguration.setAllowedOriginPatterns(List.of("*"));
+		corsConfiguration.setAllowCredentials(true);
+		corsConfiguration.setExposedHeaders(List.of("Authorization"));
+		
+		
+		http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/users" , "/api/cars" , "/api/actions")
+						.permitAll()
+						.requestMatchers("/api/authority")
+						.hasAuthority(Constants.ADMIN)
+						.anyRequest()
+						.authenticated())
+				.userDetailsService(userDetailsService)
+				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.cors()
+				.configurationSource(request -> corsConfiguration)
+				.and()
+				.csrf()
+				.disable()
+				.httpBasic();
+		
+		
+		http.headers().frameOptions().sameOrigin();
+		
+		
+		return http.build();
+	}
+	
+	
 }
