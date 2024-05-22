@@ -10,9 +10,11 @@ RUN sed -i "s|localhost|${DOCKER_HOST}|" src/main/resources/application.properti
 
 RUN ./mvnw package -Dmaven.test.skip
 
-FROM openjdk:17-jdk-slim
+FROM bitnami/java:17-debian-11
 
 WORKDIR /app
+
+RUN apt update && apt install -y curl
 
 RUN addgroup app_group && adduser --ingroup app_group app_user
 
@@ -20,5 +22,5 @@ USER app_user
 
 COPY --from=BUILDER /app/target/*.jar /app/*.jar
 
-#ENTRYPOINT ["/bin/bash"]
-ENTRYPOINT ["java", "-jar", "/app/*.jar"]
+ENTRYPOINT ["/bin/bash"]
+# ENTRYPOINT ["java", "-jar", "/app/*.jar"]
