@@ -46,7 +46,7 @@ public class SecurityConfig {
 		corsConfiguration.setExposedHeaders(List.of("Authorization"));
 		
 		
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/users" , "/api/cars" , "/api/actions")
+		http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/users" , "/api/cars" , "/api/actions" , "/actuator/health")
 						.permitAll()
 						.requestMatchers("/api/authority")
 						.hasAuthority(Constants.ADMIN)
