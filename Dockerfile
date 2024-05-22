@@ -22,5 +22,5 @@ USER app_user
 
 COPY --from=BUILDER /app/target/*.jar /app/*.jar
 
-ENTRYPOINT ["/bin/bash"]
-# ENTRYPOINT ["java", "-jar", "/app/*.jar"]
+# ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["java", "-jar", "/app/*.jar"]
