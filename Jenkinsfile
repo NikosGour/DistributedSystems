@@ -31,7 +31,7 @@ pipeline {
 		stage('Playbook mysql.yaml') {
 			steps {
 				sh '''
-					ansible-playbook -i ~/workspace/ansible/hosts.yaml -l backend_hosts ~/workspace/ansible/playbooks/mysql.yaml
+					ansible-playbook -i ~/workspace/ansible/hosts.yaml ~/workspace/ansible/playbooks/mysql.yaml
 				'''
 			}
 		}
@@ -39,7 +39,15 @@ pipeline {
 		stage('Playbook spring.yaml') {
 			steps {
 				sh '''
-					ansible-playbook -i ~/workspace/ansible/hosts.yaml -l backend_hosts ~/workspace/ansible/playbooks/spring.yaml
+					ansible-playbook -i ~/workspace/ansible/hosts.yaml ~/workspace/ansible/playbooks/spring.yaml
+				'''
+			}
+		}
+
+		stage('Playbook react.yaml') {
+			steps {
+				sh '''
+					ansible-playbook -i ~/workspace/ansible/hosts.yaml ~/workspace/ansible/playbooks/react.yaml
 				'''
 			}
 		}
