@@ -12,7 +12,7 @@ pipeline {
 			}
 		}
 
-		steage('Playbook ping.yaml') {
+		stage('Playbook ping.yaml') {
 			steps {
 				sh '''
                     ansible-playbook -i ~/workspace/ansible/hosts.yaml ~/workspace/ansible/playbooks/ping.yaml
