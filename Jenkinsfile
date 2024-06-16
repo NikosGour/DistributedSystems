@@ -23,7 +23,7 @@ pipeline {
 		stage('Playbook mysql.yaml') {
 			steps {
 				sh '''
-					ansible-playbook -i ~/workspace/ansible/hosts.yaml -l backend-hosts ~/workspace/ansible/playbooks/mysql.yaml
+					ansible-playbook -i ~/workspace/ansible/hosts.yaml -l backend_hosts ~/workspace/ansible/playbooks/mysql.yaml
 				'''
 			}
 		}
