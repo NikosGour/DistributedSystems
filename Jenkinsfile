@@ -12,6 +12,14 @@ pipeline {
 			}
 		}
 
+		steage('Playbook ping.yaml') {
+			steps {
+				sh '''
+                    ansible-playbook -i ~/workspace/ansible/hosts.yaml ~/workspace/ansible/playbooks/ping.yaml
+				'''
+			}
+		}
+
 		stage('Get ansible roles'){
 			steps {
 				sh '''
@@ -24,6 +32,14 @@ pipeline {
 			steps {
 				sh '''
 					ansible-playbook -i ~/workspace/ansible/hosts.yaml -l backend_hosts ~/workspace/ansible/playbooks/mysql.yaml
+				'''
+			}
+		}
+
+		stage('Playbook spring.yaml') {
+			steps {
+				sh '''
+					ansible-playbook -i ~/workspace/ansible/hosts.yaml -l backend_hosts ~/workspace/ansible/playbooks/spring.yaml
 				'''
 			}
 		}
