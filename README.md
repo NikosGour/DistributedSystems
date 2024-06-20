@@ -9,7 +9,7 @@ docker run --name distributed_systems_database -p 3306:3306 -e MYSQL_ROOT_PASSWO
 ## Run the application
 
  ```shell
- mvn clean package
+ ./mvnw package -Dmaven.test.skip
  ```
 
  ```shell
